@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:lts
 
 jobs:
   install:
@@ -12,12 +12,14 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - yarn-cache-{{ checksum "yarn.lock" }}
-            - yarn-cache-
-      - run: yarn install --frozen-lockfile --no-progress
+            - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-cache-{{ .Branch }}
+            - yarn-cache
+      - run: yarn install --immutable --immutable-cache --check-cache
       - save_cache:
-          key: yarn-cache-{{ checksum "yarn.lock" }}
-          paths: node_modules
+          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
       - persist_to_workspace:
           root: .
           paths: .
@@ -25,19 +27,22 @@ jobs:
   lint:
     executor: node
     steps:
-      - attach_workspace: { "at": "." }
+      - attach_workspace:
+          at: .
       - run: yarn lint
 
   test:
     executor: node
     steps:
-      - attach_workspace: { "at": "." }
+      - attach_workspace:
+          at: .
       - run: yarn test:coverage
 
   prepack:
     executor: node
     steps:
-      - attach_workspace: { "at": "." }
+      - attach_workspace:
+          at: .
       - run: yarn prepack
 
 workflows:

@@ -1,8 +1,15 @@
-.vscode
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+.vscode/
 *.log
 coverage/
 dist/
 htpasswd
 node_modules/
-storage/
 package/
+storage/

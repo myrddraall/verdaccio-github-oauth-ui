@@ -17,9 +17,7 @@
   "license": "MIT",
   "author": "Abraham Schilling",
   "main": "dist/server.js",
-  "bin": {
-    "verdaccio-github-oauth-ui": "dist/cli.js"
-  },
+  "bin": "dist/cli.js",
   "files": [
     "dist"
   ],
